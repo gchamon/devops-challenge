@@ -2,6 +2,10 @@ output "network" {
   value = module.network
 }
 
+output "subnets" {
+  value = module.network.subnets
+}
+
 output "s3_bucket_ssl_keys" {
   value = aws_s3_bucket.ssl_keys
 }
