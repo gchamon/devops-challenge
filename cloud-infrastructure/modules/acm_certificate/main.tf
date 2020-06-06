@@ -1,4 +1,5 @@
 resource "aws_acm_certificate" "this" {
+  provider                  = aws.us_east_1
   domain_name               = var.domain_names[0]
   subject_alternative_names = slice(var.domain_names, 1, length(var.domain_names))
   validation_method         = "DNS"
@@ -9,6 +10,7 @@ resource "aws_acm_certificate" "this" {
 
   tags = {
     ManagedBy = "Terraform"
+    Name      = var.domain_names[0]
   }
 }
 
