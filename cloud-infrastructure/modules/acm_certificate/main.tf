@@ -23,7 +23,11 @@ locals {
 
 resource "aws_route53_record" "validation_records" {
   depends_on = [aws_acm_certificate.this]
-  for_each   = var.zone_ids_by_domain_name
+  for_each = (
+    var.create_dns_records
+    ? var.zone_ids_by_domain_name
+    : {}
+  )
 
   name    = local.validation_options_by_domain_name[each.key].resource_record_name
   type    = local.validation_options_by_domain_name[each.key].resource_record_type
