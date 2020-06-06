@@ -8,6 +8,8 @@ variable "backend_type" {
   default = "remote"
 }
 
+variable "project_name" {}
+
 variable "backend_config" {
   default = {
     hostname     = "app.terraform.io"
