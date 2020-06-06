@@ -16,17 +16,17 @@ resource "aws_cloudfront_distribution" "main" {
     }
   }
 
-  //  origin {
-  //    domain_name = module.load_balancer.load_balancer.dns_name
-  //    origin_id   = "api"
-  //
-  //    custom_origin_config {
-  //      http_port = 80
-  //      https_port = 443
-  //      origin_protocol_policy = "https-only"
-  //      origin_ssl_protocols = ["TLSv1.2"]
-  //    }
-  //  }
+    origin {
+      domain_name = module.load_balancer.load_balancer.dns_name
+      origin_id   = "api"
+
+      custom_origin_config {
+        http_port = 80
+        https_port = 443
+        origin_protocol_policy = "https-only"
+        origin_ssl_protocols = ["TLSv1.2"]
+      }
+    }
 
   default_cache_behavior {
     target_origin_id       = "frontend"
@@ -55,27 +55,27 @@ resource "aws_cloudfront_distribution" "main" {
     }
   }
 
-//  ordered_cache_behavior {
-//    path_pattern     = "/api*"
-//    allowed_methods  = ["GET", "PUT", "DELETE", "PATCH", "POST", "HEAD", "OPTIONS"]
-//    cached_methods   = []
-//    target_origin_id = "api"
-//
-//    forwarded_values {
-//      query_string = false
-//      headers      = ["*"]
-//
-//      cookies {
-//        forward = "all"
-//      }
-//    }
-//
-//    min_ttl                = 0
-//    default_ttl            = 0
-//    max_ttl                = 0
-//    compress               = false
-//    viewer_protocol_policy = "redirect-to-https"
-//  }
+  ordered_cache_behavior {
+    path_pattern     = "/api*"
+    allowed_methods  = ["GET", "PUT", "DELETE", "PATCH", "POST", "HEAD", "OPTIONS"]
+    cached_methods   = []
+    target_origin_id = "api"
+
+    forwarded_values {
+      query_string = false
+      headers      = ["*"]
+
+      cookies {
+        forward = "all"
+      }
+    }
+
+    min_ttl                = 0
+    default_ttl            = 0
+    max_ttl                = 0
+    compress               = false
+    viewer_protocol_policy = "redirect-to-https"
+  }
 
   restrictions {
     geo_restriction {
