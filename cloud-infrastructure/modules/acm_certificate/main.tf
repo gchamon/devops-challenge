@@ -33,6 +33,7 @@ resource "aws_route53_record" "validation_records" {
 }
 
 resource "aws_acm_certificate_validation" "certificate_validation" {
+  provider                = aws.us_east_1
   certificate_arn         = aws_acm_certificate.this.arn
   validation_record_fqdns = values(aws_route53_record.validation_records).*.fqdn
 }
