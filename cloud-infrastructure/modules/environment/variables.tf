@@ -2,6 +2,8 @@ variable "environment_name" {}
 
 variable "domain_name" {}
 
+variable "aws_region" {}
+
 variable "backend_type" {
   default = "remote"
 }
