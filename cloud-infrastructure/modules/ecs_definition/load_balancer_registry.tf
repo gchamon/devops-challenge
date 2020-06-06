@@ -4,9 +4,9 @@ locals {
     port                = "traffic-port"
     healthy_threshold   = 3
     unhealthy_threshold = 5
-    # timeout             = 120
+    timeout             = 120
     timeout             = 5
-    # interval            = 160
+    interval            = 160
     interval            = 60
     matcher             = 200
   }
@@ -51,8 +51,9 @@ resource "aws_lb_listener_rule" "this" {
   }
 
   condition {
-    field  = "host-header"
-    values = [var.url]
+    host_header {
+      values = [var.url]
+    }
   }
 
   lifecycle {
