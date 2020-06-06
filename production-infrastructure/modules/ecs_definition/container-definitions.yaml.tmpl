@@ -1,0 +1,56 @@
+---
+%{ for container in containers ~}
+- name: "${container.name}"
+  image: "${container.image}"
+  user: "root"
+  cpu: ${lookup(container, "cpu", container-defaults.cpu)}
+  memory: ${lookup(container, "hard-memory-limit", container-defaults.hard-memory-limit)}
+  memoryReservation: ${lookup(container, "soft-memory-limit", container-defaults.soft-memory-limit)}
+  linuxParameters:
+      maxSwap: ${2 * lookup(container, "hard-memory-limit", container-defaults.hard-memory-limit)}
+      swappiness: 60
+%{ if length(lookup(container, "links", [])) > 0 ~}
+  links:
+%{ for link in container.links ~}
+    - "${link}"
+%{ endfor ~}
+%{ endif ~}
+%{ if length(lookup(container, "command", [])) > 0 ~}
+  entryPoint: ["sh", "-c"]
+  command:
+%{ for instruction in container.command ~}
+  - "${instruction}"
+%{ endfor ~}
+%{ endif ~}
+%{ if length(lookup(container, "volumes", [])) > 0 ~}
+  mountPoints:
+%{ for volume in container.volumes ~}
+  - containerPath: "${volume.container-path}"
+    sourceVolume: "${volume.name}"
+    readOnly: ${ lookup(volume, "read-only", false) }
+%{ endfor ~}
+%{ endif ~}
+%{ if length(keys(lookup(container, "environment-variables", {}))) > 0 ~}
+  environment:
+%{ for variable-name in keys(container.environment-variables) ~}
+  - name: "${variable-name}"
+    value: "${container.environment-variables[variable-name]}"
+%{ endfor ~}
+%{ endif ~}
+%{ if length(lookup(container, "port-mappings", [])) > 0 ~}
+  portMappings:
+%{ for port-mapping in container.port-mappings ~}
+  - containerPort: ${port-mapping.container-port}
+    hostPort: ${lookup(port-mapping, "host-port", 0)}
+    protocol: ${lookup(port-mapping, "protocol", container-defaults.port-mapping-protocol)}
+%{ endfor ~}
+%{ endif ~}
+  logConfiguration:
+    logDriver: awslogs
+    options:
+      awslogs-region: "${aws-region}"
+      awslogs-group: "${log-group}"
+      awslogs-stream-prefix: ${container.name}
+  volumesFrom: []
+  essential: true
+%{ endfor ~}
