@@ -2,28 +2,21 @@ output "vpc" {
   value = aws_vpc.this
 }
 
-output "subnet_production_a" {
-  value = aws_subnet.production_a
-}
-
-output "subnet_production_b" {
-  value = aws_subnet.production_b
-}
-
-output "subnet_staging_a" {
-  value = aws_subnet.staging_a
-}
-
-output "subnet_staging_b" {
-  value = aws_subnet.staging_b
-}
-
-output "subnet_rds_a" {
-  value = aws_subnet.rds_a
-}
-
-output "subnet_rds_b" {
-  value = aws_subnet.rds_b
+output "subnets" {
+  value = {
+    production = [
+      aws_subnet.production_a,
+      aws_subnet.production_b
+    ]
+    staging = [
+      aws_subnet.staging_a,
+      aws_subnet.staging_b
+    ]
+    rds = [
+      aws_subnet.rds_a,
+      aws_subnet.rds_b
+    ]
+  }
 }
 
 output "nat_gateway" {

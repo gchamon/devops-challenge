@@ -16,6 +16,18 @@ resource "aws_cloudfront_distribution" "main" {
     }
   }
 
+  origin {
+    domain_name = module.load_balancer.load_balancer.dns_name
+    origin_id   = "api"
+
+    custom_origin_config {
+      http_port = 80
+      https_port = 443
+      origin_protocol_policy = "https-only"
+      origin_ssl_protocols = ["TLSv1.2"]
+    }
+  }
+
   default_cache_behavior {
     target_origin_id       = "frontend"
     viewer_protocol_policy = "redirect-to-https"
@@ -43,6 +55,28 @@ resource "aws_cloudfront_distribution" "main" {
     }
   }
 
+    ordered_cache_behavior {
+    path_pattern     = "/api*"
+    allowed_methods  = ["GET", "PUT", "DELETE", "PATCH", "POST", "HEAD", "OPTIONS"]
+    cached_methods   = []
+    target_origin_id = "api"
+
+    forwarded_values {
+      query_string = false
+      headers      = ["*"]
+
+      cookies {
+        forward = "all"
+      }
+    }
+
+    min_ttl                = 0
+    default_ttl            = 0
+    max_ttl                = 0
+    compress               = false
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
   restrictions {
     geo_restriction {
       restriction_type = "none"
@@ -50,16 +84,16 @@ resource "aws_cloudfront_distribution" "main" {
   }
 
   viewer_certificate {
-    acm_certificate_arn      = data.terraform_remote_state.shared.outputs.acm_certificates_arn[var.name]
+    acm_certificate_arn      = module.acm_certificate_domain.arn
     ssl_support_method       = "sni-only"
     minimum_protocol_version = "TLSv1.2_2018"
   }
 
   custom_error_response {
-    error_code = "403"
+    error_code            = "403"
     error_caching_min_ttl = "300"
-    response_page_path = "/index.html"
-    response_code = "200"
+    response_page_path    = "/index.html"
+    response_code         = "200"
   }
 
   tags = {

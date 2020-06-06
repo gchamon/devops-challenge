@@ -14,4 +14,4 @@ output "route53_delegation_set" {
   value = aws_route53_delegation_set.root
 }
 
-resource "null_resource" "refresh_output" {}
+resource "null_resource" "refresh_outputs" {}

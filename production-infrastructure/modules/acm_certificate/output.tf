@@ -1,7 +1,3 @@
 output "arn" {
-  value = var.acm_certificate.arn
-}
-
-output "certificate" {
-  value = var.acm_certificate
+  value = aws_acm_certificate_validation.certificate_validation.certificate_arn
 }

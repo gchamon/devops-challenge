@@ -1,4 +1,8 @@
 module "load_balancer" {
   source = "../load_balancer"
-  certificates =
+
+  name            = var.environment_name
+  certificates    = [module.acm_certificate_domain.arn]
+  subnets         = data.terraform_remote_state.shared.outputs.network.subnets[var.environment_name]
+  security_groups = [aws_security_group.load_balancer.id]
 }
