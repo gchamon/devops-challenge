@@ -28,3 +28,27 @@ resource "aws_security_group" "load_balancer" {
     create_before_destroy = true
   }
 }
+
+resource "aws_security_group" "ecs" {
+  name_prefix = "${var.environment_name}-ecs"
+  description = "${var.environment_name} ecs cluster instances"
+  vpc_id      = data.terraform_remote_state.shared.outputs.network.vpc.id
+
+  ingress {
+    from_port       = 0
+    to_port         = 0
+    protocol        = -1
+    security_groups = [aws_security_group.load_balancer.id]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
