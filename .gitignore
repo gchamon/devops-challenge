@@ -31,3 +31,4 @@ override.tf.json
 .idea/
 private.tfvars
 
+node_modules
