@@ -17,6 +17,10 @@ module "ecs_service_backend" {
   lb_listener       = module.load_balancer.https_listener
   load_balancer     = module.load_balancer.load_balancer
   task_role_arn     = module.iam_role_ecs_backend_task.role.arn
+  health_check = {
+    path    = "/status"
+    matcher = 404
+  }
   containers = [
     {
       name              = "backend"
