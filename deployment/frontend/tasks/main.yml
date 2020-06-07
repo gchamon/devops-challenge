@@ -14,3 +14,9 @@
 
 - name: Deploy config.js to S3
   shell: "aws s3 cp {{ playbook_dir }}/frontend/js/config-production.js s3://{{ frontend_bucket }}/js/config.js"
+
+- name: Create Cloudfront Invalidation
+  cloudfront_invalidation:
+    alias: "{{ domain_name }}"
+    target_paths:
+      - "/*"
