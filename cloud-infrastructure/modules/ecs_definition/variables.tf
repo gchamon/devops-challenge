@@ -62,4 +62,6 @@ variable "lb_listener" {}
 
 variable "load_balancer" {}
 
-variable "main_zone" {}
+variable "zone_id" {
+  default = null
+}

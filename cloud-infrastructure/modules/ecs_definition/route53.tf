@@ -1,7 +1,12 @@
 resource "aws_route53_record" "lb_alias" {
+  count = range(
+    var.zone_id == null
+    ? 0
+    : 1
+  )
   name    = var.url
   type    = "A"
-  zone_id = var.main_zone.id
+  zone_id = var.zone_id
 
   alias {
     evaluate_target_health = true
