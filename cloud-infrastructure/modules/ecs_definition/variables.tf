@@ -61,3 +61,7 @@ variable "deployment_min_percent" {
 variable "lb_listener" {}
 
 variable "load_balancer" {}
+
+variable "task_role_arn" {
+  default = null
+}
