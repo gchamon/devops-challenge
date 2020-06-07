@@ -88,8 +88,9 @@ resource "aws_autoscaling_group" "ecs" {
 module "iam_role_ecs_agent" {
   source = "../iam_role"
 
-  name          = replace(title("${var.environment_name} ECSAgent"), " ", "")
-  create_policy = true
+  name                       = replace(title("${var.environment_name} ECSAgent"), " ", "")
+  create_policy              = true
+  assume_role_policy_service = "ecs-tasks.amazonaws.com"
 
   policies_arn = [
     "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
