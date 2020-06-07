@@ -11,8 +11,9 @@ module "iam_role_ecs_agent" {
 module "iam_role_ecs_backend_task" {
   source = "../iam_role"
 
-  name          = replace(title("${var.environment_name} ECS backend task"), " ", "")
-  create_policy = true
+  name                       = replace(title("${var.environment_name} ECS backend task"), " ", "")
+  assume_role_policy_service = "ecs-tasks.amazonaws.com"
+  create_policy              = true
 
   policy_json = <<JSON
 {
