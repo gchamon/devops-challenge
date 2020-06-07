@@ -4,14 +4,29 @@
 
     'use strict';
 
-    const STORAGE_KEY = 'todos-vuejs';
+    const STORAGE_KEY = 'default';
 
     exports.todoStorage = {
-        fetch () {
-            return JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        async fetch() {
+            const response = await fetch(`${config.backendUrl}/state/${STORAGE_KEY}`)
+
+            return (response.status === 200)
+                ? response.json()
+                : [];
         },
-        save (todos) {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify(todos));
+        async save(todos) {
+            const response = await fetch(`${config.backendUrl}/state/${STORAGE_KEY}`, {
+                method: "PUT",
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(todos)
+            })
+
+            if (response.status !== 200) {
+                console.log("error saving state")
+                console.log(response.body)
+            }
         }
     };
 

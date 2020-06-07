@@ -1,60 +1,89 @@
 <!doctype html>
 <html data-framework="vue">
-	<head>
-		<meta charset="utf-8">
-		<title>Vue.js • TodoMVC</title>
-		<link rel="stylesheet" href="node_modules/todomvc-common/base.css">
-		<link rel="stylesheet" href="node_modules/todomvc-app-css/index.css">
-		<style> [v-cloak] { display: none; } </style>
-	</head>
-	<body>
-		<section class="todoapp" v-cloak>
-			<header class="header">
-				<h1>todos</h1>
-				<input class="new-todo" autofocus autocomplete="off" placeholder="What needs to be done?" v-model="newTodo" @keyup.enter="addTodo">
-			</header>
-			<section class="main" v-show="todos.length">
-				<input id="toggle-all" class="toggle-all" type="checkbox" v-model="allDone">
-				<label for="toggle-all">Mark all as complete</label>
-				<ul class="todo-list">
-					<li class="todo" v-for="todo in filteredTodos" :key="todo.id" :class="{completed: todo.completed, editing: todo == editedTodo}">
-						<div class="view">
-							<input class="toggle" type="checkbox" v-model="todo.completed">
-							<label @dblclick="editTodo(todo)">{{todo.title}}</label>
-							<button class="destroy" @click="removeTodo(todo)"></button>
-						</div>
-						<input class="edit" type="text" v-model="todo.title" v-todo-focus="todo == editedTodo" @blur="doneEdit(todo)" @keyup.enter="doneEdit(todo)" @keyup.esc="cancelEdit(todo)">
-					</li>
-				</ul>
-			</section>
-			<footer class="footer" v-show="todos.length">
+<head>
+    <meta charset="utf-8">
+    <title>TodoMVC - DEVOPS CHALLENGE</title>
+    <link href="node_modules/todomvc-common/base.css" rel="stylesheet">
+    <link href="node_modules/todomvc-app-css/index.css" rel="stylesheet">
+    <style> [v-cloak] {
+        display: none;
+    } </style>
+</head>
+<style>
+    .loading {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .loading-label {
+        margin: 5em;
+        font: 14px 'Helvetica Neue', Helvetica, Arial, sans-serif;
+        line-height: 1.4em;
+        color: #111111;
+        font-weight: 300;
+    }
+</style>
+<body>
+<section class="todoapp" v-cloak>
+    <header class="header">
+        <h1>todos</h1>
+    </header>
+    <section v-if="ready">
+        <header>
+            <input @keyup.enter="addTodo" autocomplete="off" autofocus class="new-todo"
+                   placeholder="What needs to be done?"
+                   v-model="newTodo">
+        </header>
+        <section class="main" v-show="todos.length">
+            <input class="toggle-all" id="toggle-all" type="checkbox" v-model="allDone">
+            <label for="toggle-all">Mark all as complete</label>
+            <ul class="todo-list">
+                <li :class="{completed: todo.completed, editing: todo == editedTodo}" :key="todo.id" class="todo"
+                    v-for="todo in filteredTodos">
+                    <div class="view">
+                        <input class="toggle" type="checkbox" v-model="todo.completed">
+                        <label @dblclick="editTodo(todo)">{{todo.title}}</label>
+                        <button @click="removeTodo(todo)" class="destroy"></button>
+                    </div>
+                    <input @blur="doneEdit(todo)" @keyup.enter="doneEdit(todo)" @keyup.esc="cancelEdit(todo)"
+                           class="edit"
+                           type="text" v-model="todo.title" v-todo-focus="todo == editedTodo">
+                </li>
+            </ul>
+        </section>
+        <footer class="footer" v-show="todos.length">
 				<span class="todo-count">
 					<strong v-text="remaining"></strong> {{pluralize('item', remaining)}} left
 				</span>
-				<ul class="filters">
-					<li><a href="#/all" :class="{selected: visibility == 'all'}">All</a></li>
-					<li><a href="#/active" :class="{selected: visibility == 'active'}">Active</a></li>
-					<li><a href="#/completed" :class="{selected: visibility == 'completed'}">Completed</a></li>
-				</ul>
-				<button class="clear-completed" @click="removeCompleted" v-show="todos.length > remaining">
-					Clear completed
-				</button>
-			</footer>
-		</section>
-		<section id="info">
-			<footer class="info">
-				<p>Double-click to edit a todo</p>
-				<p>Written by <a href="http://evanyou.me">Evan You</a></p>
-				<p>Part of <a href="http://todomvc.com">TodoMVC</a></p>
-				<p>Backend URL: {{backendUrl}}</p>
-			</footer>
-		</section>
-		<script src="node_modules/todomvc-common/base.js"></script>
-		<script src="node_modules/director/build/director.js"></script>
-		<script src="node_modules/vue/dist/vue.js"></script>
-		<script src="js/config.js"></script>
-		<script src="js/store.js"></script>
-		<script src="js/app.js"></script>
-		<script src="js/routes.js"></script>
-	</body>
+            <ul class="filters">
+                <li><a :class="{selected: visibility == 'all'}" href="#/all">All</a></li>
+                <li><a :class="{selected: visibility == 'active'}" href="#/active">Active</a></li>
+                <li><a :class="{selected: visibility == 'completed'}" href="#/completed">Completed</a></li>
+            </ul>
+            <button @click="removeCompleted" class="clear-completed" v-show="todos.length > remaining">
+                Clear completed
+            </button>
+        </footer>
+    </section>
+    <section class="loading" v-if="!ready">
+        <label class="loading-label">loading state...</label>
+    </section>
+</section>
+<section id="info">
+    <footer class="info">
+        <p>Double-click to edit a todo</p>
+        <p>Based on <a href="http://todomvc.com">TodoMVC</a> by <a href="http://evanyou.me">Evan You</a></p>
+        <p>Modified to persist state using a REST API</p>
+        <p>Backend URL: {{backendUrl}}</p>
+    </footer>
+</section>
+<script src="node_modules/todomvc-common/base.js"></script>
+<script src="node_modules/director/build/director.js"></script>
+<script src="node_modules/vue/dist/vue.js"></script>
+<script src="js/config.js"></script>
+<script src="js/store.js"></script>
+<script src="js/app.js"></script>
+<script src="js/routes.js"></script>
+</body>
 </html>
