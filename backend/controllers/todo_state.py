@@ -17,7 +17,11 @@ class TodoState(object):
             response.status = falcon.HTTP_200
             response.media = todo_list
         except Exception as e:
-            response.media = {"cause": f"Cannot get state {state_name}: {str(e)}"}
+            response.media = {
+                "cause": f"Cannot get state {state_name}: {str(e)}",
+                "bucket": STORAGE_BUCKET,
+                "key": f"{state_name}.json"
+            }
             response.status = falcon.HTTP_404
 
     def on_put(self, request: falcon.Request, response: falcon.Response, state_name: str):
