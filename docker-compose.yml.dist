@@ -1,0 +1,18 @@
+version: "3"
+
+services:
+  frontend:
+    image: "nginx"
+    volumes:
+      - "./frontend:/usr/share/nginx/html:ro"
+    ports:
+      - "80:80"
+  backend:
+    image: "devops-challenge-backend"
+    build: "./backend"
+    volumes:
+      - "./backend:/app"
+    ports:
+      - "5000:5000"
+    environment:
+      STORAGE_BUCKET: "<STORAGE_BUCKET_NAME>"
