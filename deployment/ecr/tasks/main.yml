@@ -1,0 +1,7 @@
+---
+# tasks file for ecr
+- name: Gather AWS facts
+  include_tasks: gather-aws-facts.yml
+
+- name: Build image
+  import_tasks: build-image-and-push.yml

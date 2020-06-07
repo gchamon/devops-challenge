@@ -1,0 +1,20 @@
+---
+- name: Login to ECR
+  shell: $(aws ecr get-login --no-include-email)
+
+- name: Docker - Build image and push
+  docker_image:
+    build:
+      path: "{{ playbook_dir }}/{{ dockerfile_dir | default('') }}"
+    name: "{{ aws_info.account }}.dkr.ecr.{{ aws_region | default('us-east-1') }}.amazonaws.com/{{ ecr_repo_name }}"
+    tag: "{{ item }}"
+    push: yes
+    source: build
+  with_items: "{{ [ecr_repo_tag] if ecr_repo_tag is defined else ecr_repo_tags | default(['latest']) }}"
+
+- name: Docker - Cleanup
+  docker_image:
+    name: "{{ aws_info.account }}.dkr.ecr.{{ aws_region | default('us-east-1') }}.amazonaws.com/{{ ecr_repo_name }}"
+    tag: "{{ item }}"
+    state: absent
+  with_items: "{{ [ecr_repo_tag] if ecr_repo_tag is defined else ecr_repo_tags | default(['latest']) }}"

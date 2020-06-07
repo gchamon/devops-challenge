@@ -1,0 +1,4 @@
+---
+- name: Get the current caller identity information
+  aws_caller_info:
+  register: aws_info
