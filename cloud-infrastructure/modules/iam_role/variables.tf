@@ -12,3 +12,7 @@ variable "policies_arn" {
 variable "policy_json" {
   default = null
 }
+
+variable "create_policy" {
+  default = false
+}

@@ -32,7 +32,7 @@ resource "aws_iam_role_policy_attachment" "attachments" {
 
 resource "aws_iam_role_policy" "role_policy" {
   count = (
-    var.policy_json == null
+    var.create_policy == false
     ? 0
     : 1
   )
