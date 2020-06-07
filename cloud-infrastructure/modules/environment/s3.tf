@@ -4,3 +4,7 @@ module "s3_bucket_static" {
   domain_name              = var.domain_name
   origin_access_id_iam_arn = aws_cloudfront_origin_access_identity.main.iam_arn
 }
+
+resource "aws_s3_bucket" "state_storage" {
+  bucket = "${var.project_name}-${var.environment_name}-state-storage"
+}

@@ -9,6 +9,6 @@ variable "policies_arn" {
   default = []
 }
 
-variable "policies_json" {
-  default = []
+variable "policy_json" {
+  default = null
 }

@@ -30,18 +30,12 @@ resource "aws_iam_role_policy_attachment" "attachments" {
   role       = aws_iam_role.this.name
 }
 
-module "iam_aggregated_policy" {
-  source = "../iam_aggregated_policy"
-
-  name                 = "${replace(title(replace(var.name, "-", " ")), " ", "")}RoleAggregatedPolicy"
-  source_policies_json = var.policies_json
-  description          = "Permissions policy for role ${var.name}"
-  path                 = "/roles/"
-}
-
-resource "aws_iam_role_policy_attachment" "aggregated_policy" {
-  count = length(var.policies_json)
-
-  role       = aws_iam_role.this.name
-  policy_arn = module.iam_aggregated_policy.policy.arn
+resource "aws_iam_role_policy" "role_policy" {
+  count = (
+    var.policy_json == null
+    ? 0
+    : 1
+  )
+  policy = var.policy_json
+  role   = aws_iam_role.this.id
 }

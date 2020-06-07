@@ -1,3 +1,7 @@
+resource "aws_ecr_repository" "backend" {
+  name = "backend"
+}
+
 module "ecs_service_backend" {
   source = "../ecs_definition"
 
@@ -15,7 +19,7 @@ module "ecs_service_backend" {
   containers = [
     {
       name              = "backend"
-      image             = "nginx"
+      image             = aws_ecr_repository.backend.repository_url
       hard-memory-limit = 128
       soft-memory-limit = 64
       port-mappings = [

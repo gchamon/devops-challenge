@@ -92,4 +92,21 @@ module "iam_role_ecs_agent" {
   policies_arn = [
     "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
   ]
+
+  policy_json = <<JSON
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Action": [
+        "s3:GetObject",
+        "s3:HeadBucket",
+        "s3:PutObject"
+      ],
+      "Effect": "Allow",
+      "Resource": "${aws_s3_bucket.state_storage.arn}/*"
+    }
+  ]
+}
+JSON
 }
