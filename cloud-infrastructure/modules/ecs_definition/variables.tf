@@ -61,7 +61,3 @@ variable "deployment_min_percent" {
 variable "lb_listener" {}
 
 variable "load_balancer" {}
-
-variable "zone_id" {
-  default = null
-}
