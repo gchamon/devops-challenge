@@ -23,7 +23,8 @@ module "iam_role_ecs_backend_task" {
       "Action": [
         "s3:GetObject",
         "s3:HeadBucket",
-        "s3:PutObject"
+        "s3:PutObject",
+        "s3:List*"
       ],
       "Effect": "Allow",
       "Resource": "${aws_s3_bucket.state_storage.arn}/*"
