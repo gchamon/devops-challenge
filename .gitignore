@@ -36,3 +36,4 @@ environments.yml
 config.json
 config.js
 __pycache__
+/docker-compose.yml
