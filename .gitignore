@@ -34,3 +34,4 @@ private.tfvars
 node_modules
 __pycache__
 /docker-compose.yml
+production-vars.yml

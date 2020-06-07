@@ -2,3 +2,4 @@
 ecr_repo_name: "backend"
 dockerfile_dir: "backend"
 aws_region: "us-east-2"
+backend_url: "https://example.com"

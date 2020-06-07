@@ -27,6 +27,9 @@ module "ecs_service_backend" {
           container-port = 5000
         }
       ]
+      environment-variables = {
+        STORAGE_BUCKET = aws_s3_bucket.state_storage.bucket
+      }
     }
   ]
 }
