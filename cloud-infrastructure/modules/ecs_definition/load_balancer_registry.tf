@@ -36,10 +36,6 @@ resource "aws_lb_target_group" "this" {
     interval            = local.health_check.interval
     matcher             = local.health_check.matcher
   }
-
-  lifecycle {
-    create_before_destroy = true
-  }
 }
 
 resource "aws_lb_listener_rule" "this" {
