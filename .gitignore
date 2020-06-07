@@ -32,8 +32,5 @@ override.tf.json
 private.tfvars
 
 node_modules
-environments.yml
-config.json
-config.js
 __pycache__
 /docker-compose.yml
