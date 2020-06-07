@@ -1,0 +1,16 @@
+---
+- name: NPM Install
+  shell:
+    cmd: docker run --rm -u "$(id -u)" -v "$(pwd)/frontend:/app" -w "/app" node:alpine npm install
+    chdir: "{{ playbook_dir }}"
+
+- name: Compile config.js template
+  template:
+    src: "{{ playbook_dir }}/frontend/js/config.js.j2"
+    dest: "{{ playbook_dir }}/frontend/js/config-production.js"
+
+- name: Sync to S3
+  shell: "aws s3 sync --exclude='*config*' {{ playbook_dir }}/frontend s3://{{ frontend_bucket }}"
+
+- name: Deploy config.js to S3
+  shell: "aws s3 cp {{ playbook_dir }}/frontend/js/config-production.js s3://{{ frontend_bucket }}/js/config.js"

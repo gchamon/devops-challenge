@@ -2,7 +2,7 @@ version: "3"
 
 services:
   frontend:
-    image: "nginx"
+    image: "nginx:alpine"
     volumes:
       - "./frontend:/usr/share/nginx/html:ro"
     ports:
@@ -12,7 +12,6 @@ services:
     build: "./backend"
     volumes:
       - "./backend:/app"
+      - "~/.aws:/root/aws:ro"
     ports:
       - "5000:5000"
-    environment:
-      STORAGE_BUCKET: "<STORAGE_BUCKET_NAME>"

@@ -2,5 +2,7 @@
 - hosts: localhost
   tasks:
     - include_vars: production-vars.yml
+#    - include_role:
+#        name: "deployment/ecr"
     - include_role:
-        name: "deployment/ecr"
+        name: "deployment/frontend"
