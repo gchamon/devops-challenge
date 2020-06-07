@@ -1,7 +1,7 @@
 module "ecs_service_backend" {
   source = "../ecs_definition"
 
-  service_name      = "nginx"
+  service_name      = "backend"
   cluster_id        = aws_ecs_cluster.default.id
   aws_region        = var.aws_region
   environment       = var.environment_name

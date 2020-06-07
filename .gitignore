@@ -32,3 +32,7 @@ override.tf.json
 private.tfvars
 
 node_modules
+environments.yml
+config.json
+config.js
+

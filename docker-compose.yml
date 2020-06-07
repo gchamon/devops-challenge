@@ -1,0 +1,9 @@
+version: "3"
+
+services:
+  frontend:
+    image: nginx
+    volumes:
+      - "./frontend:/usr/share/nginx/html:ro"
+    ports:
+      - "80:80"
