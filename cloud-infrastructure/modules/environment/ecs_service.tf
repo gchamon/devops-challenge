@@ -1,7 +1,7 @@
 module "ecs_service_backend" {
   source = "../ecs_definition"
 
-  service_name      = "api-gateway"
+  service_name      = "nginx"
   cluster_id        = aws_ecs_cluster.default.id
   aws_region        = var.aws_region
   environment       = var.environment_name
@@ -14,7 +14,7 @@ module "ecs_service_backend" {
   load_balancer     = module.load_balancer.load_balancer
   containers = [
     {
-      name              = "nginx"
+      name              = "backend"
       image             = "nginx"
       hard-memory-limit = 128
       soft-memory-limit = 64
