@@ -174,7 +174,7 @@ Para o usuário de console, crie uma senha e para o usuário do terraform crie u
 
 #### Configuração
 
-Configure uma conta no Terraform Cloud. Crie também um token de acesso e [configure a CLI](https://www.terraform.io/docs/commands/cli-config.html) como descrito. Quando terminar, você deverá ter o arquivo `~/.terraformrc` com a seguinte estrutura:
+Configure uma conta no Terraform Cloud. Crie também um token de acesso e [configure a CLI do Terraform](https://www.terraform.io/docs/commands/cli-config.html). Quando terminar, você deverá ter o arquivo `~/.terraformrc` com a seguinte estrutura:
 
 ```r
 credentials "app.terraform.io" {
