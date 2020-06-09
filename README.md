@@ -312,9 +312,13 @@ frontend_bucket: "<project_name>-production-website"
 
 Com isso, você precisa apenas de executar `ansible-playbook deploy.yml` que as roles do ansible cuidarão do processo de deploy.
 
+O primeiro deploy é o do Docker para o Elastic Container Registry. Nesse passo será compilada a imagem docker do backend e enviada para nosso repositório privativo de imagens. Note que entre o deploy do container e a sua execução no ECS pode existir um delay de 5 a 10 minutos.
+
+O segundo passo garante que as dependencias do NPM estão instaladas e envia os artefatos do frontend para o bucket S3, criando uma invalidação do CloudFront em seguida. Os arquivos são refletidos imediatamente pelo CloudFront.
+
 ### Conclusão da etapa em cloud
 
-Terminado, visite `devops-challenge.seudomínio.com` e o todo deverá estar disponível. Observe que um arquivo chamado `default.json` será criado em `seu-nome-devops-challenge-production-state-storage`. Esse é o arquivo no qual o backend guarda o estado da sua aplicação TodoMVC.
+Terminado, visite `devops-challenge.seudomínio.com` e o tudo deverá estar disponível. Observe que um arquivo chamado `default.json` será criado em `seu-nome-devops-challenge-production-state-storage`. Esse é o arquivo no qual o backend guarda o estado da sua aplicação TodoMVC.
 
 # Documentação
 
