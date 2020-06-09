@@ -114,7 +114,7 @@ O ECR funciona como um repositório Docker, como o [Docker Hub](https://hub.dock
 
 Para executar a aplicação localmente, é necessário compilar a imagem docker do backend e baixar as dependências do [npm](https://www.npmjs.com/) do frontend. Para isso, um script de conveniência foi escrito. Basta executar `install.sh` que esse processo é realizado. Note que não é necessário possuir o npm instalado. O script se vale do docker para baixar uma imagem nodejs alpine e, com ela, mapeando a pasta do frontend para dentro de si, instala o conteúdo necessário.
 
-Uma vez compilada a imagem e baixadas as dependências podemos executar a aplicação. O frontend é servido por um [Nginx](https://www.nginx.com/) e o backend é executado pelo [gunicorn](https://gunicorn.org/), que é um servidor HTTP WSGI cujo falcon, nosso framework python, é compativel. Toda a aplicação é executada em container.
+Uma vez compilada a imagem e baixadas as dependências podemos executar a aplicação. O frontend é servido por um [Nginx](https://www.nginx.com/) e o backend é executado pelo [gunicorn](https://gunicorn.org/), que é um servidor HTTP WSGI que o *Falcon*, nosso framework Python, é compativel. Toda a aplicação é executada em container.
 
 ### Execução
 
