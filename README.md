@@ -1,3 +1,4 @@
+
 # DevOps Challenge
 Stack completa de infraestrutura e desenvolvimento de um website em Docker na AWS.
 
@@ -87,7 +88,15 @@ Note que todos os elementos de infraestrutura podem ser utilizados no free tier:
 | S3 | 5 GB |
 | CloudFront | 50 GB |
 |  ||
- 
+
+### Terraform
+
+O projeto do Terraform, que se encontra na pasta `cloud-infrastrucutre` segue o modelo de [composição de infraestrura](https://www.terraform-best-practices.com/key-concepts#composition). Grosso modo, é um modelo que segmenta a infraestrurua, deixando em um mesmo estado apenas os recursos que realmente são necessários. Com isso ganhamos eficiência em deploy, pois com uma infraestrutura segmentada existem menos recursos para serem atualizados em tempo de *plan*.
+
+Também reduzimos o *blast radius* (ou raio de "explosão"), que é a lista efetiva de recursos que podem ser afetados por uma intervenção mal planejada. Dessa forma, se a infraestrutura *shared*, *production* e outros eventuais ambientes como *staging* estiverem em seus respectivos workspaces, uma má implementação afetaria primeiramente o ambiente *staging*, aumentando as chances de ser visto e corrigido antes de afetar o ambiente de produção.
+
+Para se alcançar este efeito, importamos dados compartilhados entre os workspaces. O workspace *production* depende da infraestrutura de rede, que é única, compartilhada entre todos os ambientes. Para isso, é importado o estado de *shared* através do Data Source `terraform_remote_state`, que recebe o tipo de backend e sua configuração de acesso.
+
 ### Deploy
 
 O deploy é feito inteiramente por um playbook Ansible. Esse playbook executa duas roles, uma para popular o ECR e outra para popular o bucket S3 e invalidar o cache do CloudFront.
@@ -372,6 +381,11 @@ module "ecs_service_backend" {
 ### environment
 
 - É o módulo que define cada ambiente.
+- Busca no estado do workspace *shared* as informações de rede e cria o Load Balancer em Muti AZ.
+- Cria um Autoscaling Group, baseada na imagem Amazon Linux 2 ECS Optimized, que ao ser lançada se registra, por meio do `user_data.sh` no cluster ECS, também criado por ele.
+- Cria dois certificados, um para o CloudFront, na região `us-east-1` e outro para o Load Balancer na zona configurada.
+- Instancia o módulo do `ecs_definition`, que recebe as configurações do serviço `backend` e cria as devidas regras de redirecionamento para o target group do serviço ECS no Load Balancer. Tudo isso é feito de forma abstraída, sem que o usuário precise se preocupar com o formato da Task Definition, nem onde registrar o health check ou mesmo onde definir as regras de uso de recursos de sistema da EC2 Host.
+- A Task Definition é compilada usando templates do Terraform. O formato recebido pela AWS é JSON para task definition, porém o arquivo é feito em YAML que possui uma sintaxe compatível com produção dinâmica de texto a partir de templates (JSON, por exemplo, requer que ao fim de uma lista não haja vírgula, o que dificulta o processo de criação de templates)
 
 ### iam_role
 - Cria uma role com a trust relationship padrão para o EC2.
