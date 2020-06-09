@@ -437,8 +437,13 @@ Essa capacidade não foi necessária nesse projeto, mas o módulo é bem versát
 # Melhorias futuras
 
 - Converter o ECS para Kubernetes
+
 Apesar do ECS ser interessante para aplicações de docker na AWS, ele restringe o escopo de atuação, forçando o usuário a ficar nesse tipo de infraestrurua. Um trabalho grande precisa ser feito caso um port desse serviço seja necessário para outro tipo de infraestrutura.
+
 - Usar uma database transacional ACID para o backend
+
 Para o Intuito deste exercício é interessante essa abordagem de armazenamento no S3 por ser algo simples e fácil de configurar. Porém a abordagem de abandonar esquema abre portas para corrupção de dados. Outro problema seria a falta de suporte a multiplos usuários. Se mais de uma pessoa entrar na aplicação, ela se comportará de forma errática.
+
 - Implementar uma autenticação OIDC para o frontend
+
 - Melhorar a documentação dos módulos do terraform
