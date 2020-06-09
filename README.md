@@ -320,6 +320,15 @@ O segundo passo garante que as dependencias do NPM estão instaladas e envia os 
 
 Terminado, visite `devops-challenge.seudomínio.com` e o tudo deverá estar disponível. Observe que um arquivo chamado `default.json` será criado em `seu-nome-devops-challenge-production-state-storage`. Esse é o arquivo no qual o backend guarda o estado da sua aplicação TodoMVC.
 
+
+### Destruição da infraestrutura
+
+Para destruir a infraestrutura, realize dois plans de destruição, um em cada workspace (`Settings > Destruction and Deletion > Queue destroy plan`).
+
+Enquanto os planos estão sendo executados, se dirija o console da AWS. Na parte do S3, esvazie todos os buckets. N parte do EC2, encontre a parte `Load Balancers`, selecione o Load Balancer `production` criado, vá em `Actions > Edit attributes` e desmarque `Deletion Protection`, clicando em `save` em seguida.
+
+Volte para o Terraform Cloud e aprove os planos de destruição da infraestrutura, começando pelo workspace *production* e em seguida o *shared*.
+
 # Documentação
 
 ## backend
