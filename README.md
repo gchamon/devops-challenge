@@ -296,7 +296,7 @@ O frontend é o TodoMVC em Vue.js, como feito por Evan You. O `index.html` foi m
 
 ## cloud-infrastrucuture (terraform)
 
-#### Network
+### Network
 
 A rede é composta por:
 
@@ -312,7 +312,7 @@ A rede é composta por:
 - Um subnet group com as redes privadas para posterior utilização em um RDS.
 
 
-#### website_bucket
+### website_bucket
 
 Composto por:
 
