@@ -258,7 +258,7 @@ Essa etapa demorará entre 20 e 30 minutos para concluir, pois criará autoscali
 
 Para realizar o deploy com o Ansible, copie o arquivo `production-vars.yml.dist` removendo a extensão `.dist`. Substitua o conteúdo do arquivo de acordo:
 
-```
+```yaml
 ---
 ecr_repo_name: "backend"    # keep it like this
 dockerfile_dir: "backend"   # keep it like this
