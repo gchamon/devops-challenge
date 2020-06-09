@@ -234,7 +234,7 @@ Neste momento será possível aplicar a primeira parte da infraestrutura.
 
 #### Deploy da infraestrutura - Shared
 
-Primeiro vá no workspace `shared` e se não houver nenhuma execução em processo, execute uma manualmente. O Terraform Cloud divide cada intervenção de infraestrutura em `plan` e `apply`. No estágio `plan`, uma descrição do que será feito, com todas as configurações de cada recurso a ser criado.
+Primeiro vá no workspace `shared` e se não houver nenhuma execução em processo, execute uma manualmente (`Queue plan > Queue plan`). O Terraform Cloud divide cada intervenção de infraestrutura em `plan` e `apply`. No estágio `plan`, uma descrição do que será feito, com todas as configurações de cada recurso a ser criado.
 
 Quando o estágio de `plan` for concluído na infraestrutura `shared`, o resumo deve mostrar `Plan: 19 to add, 0 to change, 0 to destroy`. Aprove o plan, e a infraestrutura base será criada.
 
