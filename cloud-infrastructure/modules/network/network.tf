@@ -62,7 +62,7 @@ resource "aws_subnet" "staging_b" {
   }
 }
 
-resource "aws_subnet" "rds_a" {
+resource "aws_subnet" "private_a" {
   vpc_id                  = aws_vpc.this.id
   cidr_block              = "${var.cidr_prefix}.64.0/20"
   map_public_ip_on_launch = true
@@ -73,7 +73,7 @@ resource "aws_subnet" "rds_a" {
   }
 }
 
-resource "aws_subnet" "rds_b" {
+resource "aws_subnet" "private_b" {
   vpc_id                  = aws_vpc.this.id
   cidr_block              = "${var.cidr_prefix}.80.0/20"
   map_public_ip_on_launch = true
@@ -109,19 +109,19 @@ resource "aws_route_table" "private" {
   }
 }
 
-resource "aws_route_table_association" "rds_a" {
-  subnet_id      = aws_subnet.rds_a.id
+resource "aws_route_table_association" "private_a" {
+  subnet_id      = aws_subnet.private_a.id
   route_table_id = aws_route_table.private.id
 }
 
-resource "aws_route_table_association" "rds_b" {
-  subnet_id      = aws_subnet.rds_b.id
+resource "aws_route_table_association" "private_b" {
+  subnet_id      = aws_subnet.private_b.id
   route_table_id = aws_route_table.private.id
 }
 
 resource "aws_db_subnet_group" "rds" {
-  name       = "main"
-  subnet_ids = [aws_subnet.rds_a.id, aws_subnet.rds_b.id]
+  name       = "rds"
+  subnet_ids = [aws_subnet.private_a.id, aws_subnet.private_b.id]
 
   tags = {
     Name = "RDS Subnet Group"

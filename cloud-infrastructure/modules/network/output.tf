@@ -12,9 +12,9 @@ output "subnets" {
       aws_subnet.staging_a,
       aws_subnet.staging_b
     ]
-    rds = [
-      aws_subnet.rds_a,
-      aws_subnet.rds_b
+    private = [
+      aws_subnet.private_a,
+      aws_subnet.private_b
     ]
   }
 }
