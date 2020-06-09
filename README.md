@@ -270,9 +270,11 @@ ecr_repo_name: "backend"    # keep it like this
 dockerfile_dir: "backend"   # keep it like this
 backend_path: "api"         # keep it like this
 aws_region: "us-east-2"
-domain_name: "devops-challenge.seudomínio.com"
-frontend_bucket: "seu-nome-devops-challenge-production-website"
+domain_name: "<domain_name>"
+frontend_bucket: "<project_name>-production-website"
 ```
+
+- `<project_name>` e `<domain_name>` são variáveis setadas no passo de configuração do workspace *production* no Terraform Cloud.
 
 Com isso, você precisa apenas de executar `ansible-playbook deploy.yml` que as roles do ansible cuidarão do processo de deploy.
 
