@@ -75,7 +75,7 @@ Os certificados SSL são gerenciados pelo [AWS Certificate Manager](https://aws.
 
 A infraestrutura utiliza o [Route 53](https://aws.amazon.com/route53/) para definição de DNS que faz referência a nossa distribuição do CloudFront. Ela espera que um domínio exista e produz quatro [Name Servers](https://en.wikipedia.org/wiki/Name_server) que precisam ser associados a um domínio real por meio de records tipo NS para que, por exemplo, certificados SSL sejam gerados e que o site seja accessível.
 
-A chave para acesso SSH das instâncias do cluster ECS é depositada automaticamente num bucket definido. No entanto, o ECS possui um painel de monitoramento bastante compreensivo, com eventos, métricas e logs que torna acesso direto por terminal às máquinas desnecessário.
+A chave para acesso SSH das instâncias do cluster ECS é depositada automaticamente num bucket definido. No entanto, o ECS possui um painel de monitoramento bastante compreensivo, com eventos, métricas e logs que torna acesso direto por terminal às máquinas desnecessário. Por definição de segurança, por meio de Security Groups, as instâncias do cluster só são accessíveis pelo Load Balancer, ou seja somente requisições na [Camada de Aplicação](https://pt.wikipedia.org/wiki/Camada_de_aplica%C3%A7%C3%A3o) chegam nas instâncias, impedindo acesso por SSH remoto. Não contando com as instâncias EC2, resto da aplicação é totalmente gerenciado pela AWS, portanto ficamos seguros quanto a ataques e indisponibilidades pois no [Modelo de Responsabilidade Compartilhada](https://aws.amazon.com/pt/compliance/shared-responsibility-model/) da AWS, contanto que tomemos as precauções de segurança de tráfego e dos dados que nossa aplicação manipula, a AWS se encarrega da disponibilidade da infraestrutura e de todos os seus [serviços gerenciados](https://www.ibm.com/blogs/cloud-computing/2015/02/05/whats-difference-managed-unmanaged-clouds/).
 
 Abaixo encontra-se um diagrama da topologia da infraestrutura em nuvem:
 
@@ -170,13 +170,11 @@ Com a root account, crie dois usuários, um para você entrar pelo console e out
 
 Para o usuário de console, crie uma senha e para o usuário do terraform crie uma chave de acesso de API. Precisaremos dela no Terraform Cloud.
 
-Digite no console ``
-
 ### Terraform Cloud
 
 #### Configuração
 
-Configure uma conta no Terraform Cloud. Crie também um token de acesso e [configure a CLI](https://www.terraform.io/docs/commands/cli-config.html) como descrito. Quando terminar, você deverá ter o arquivo `~/.terraformrc` com a seguinte estrutura:
+Configure uma conta no Terraform Cloud. [Crie também um token de acesso](https://app.terraform.io/app/settings/tokens) e [configure a CLI do Terraform](https://www.terraform.io/docs/commands/cli-config.html). Quando terminar, você deverá ter o arquivo `~/.terraformrc` com a seguinte estrutura:
 
 ```r
 credentials "app.terraform.io" {
@@ -184,11 +182,11 @@ credentials "app.terraform.io" {
 }
 ```
 
-Ao logar no Terraform Cloud, crie uma organização chamada `devops-challenge`. Com isso será possível inicializar os workspaces.
+Ao logar no Terraform Cloud, crie uma organização chamada `devops-challenge`. Ao criar a organização, será pedido para se criar um workspace. Você pode associar agora o *fork* desse projeto da sua conta GitHub e criar o workspace *shared*.
 
-Navegue para a pasta `cloud-infrastructure/shared` e inicialize o terraform com `terraform init`. Faça o mesmo em `cloud-infrastructure/shared`. Dois workspaces serão criados no Terraform Cloud.
+No linux, navegue para a pasta `cloud-infrastructure/shared` e inicialize o terraform com `terraform init`. Faça o mesmo em `cloud-infrastructure/production`. Dois workspaces serão criados no Terraform Cloud.
 
-Esses workspaces precisam de três variáves do terraform configuradas e duas variáveis de ambiente. Vá no terraform cloud, selecione a organização criada, e selecione o workspace `shared`. No topo, clique em `Variables`. O ambiente necessita que seja configurado com as seguintes variáveis:
+No Terraform Cloud, esses workspaces precisam de três variáves do terraform configuradas e duas variáveis de ambiente. Vá no Terraform Cloud, na organização criada e selecione o workspace `shared`. No topo, clique em `Variables`. O ambiente necessita que seja configurado com as seguintes variáveis:
 
 - **Terraform Variables**
 
@@ -196,7 +194,7 @@ Esses workspaces precisam de três variáves do terraform configuradas e duas va
 |--|--|
 | aws_region | recomendado: `us-east-2` |
 | zone_name | devops-challenge.seudomínio.com |
-| project_name* | seu-nome-devops-challenge |
+| project_name | seu-nome-devops-challenge* |
 
 *A variável `project_name` é utilizada para dar nome aos buckets estáticos de produção. Como os buckets são regionais, mas são indexados globalmente, seus nomes precisam ser únicos. Escolha um nome, portanto que seja único para o seu projeto.
 
@@ -208,8 +206,6 @@ Esses workspaces precisam de três variáves do terraform configuradas e duas va
 | AWS_SECRET_ACCESS_KEY | Secret da Access Key do usuário IAM Terraform* | Sim |
 
 *Esses usuários foram criados na conta AWS no console, no passo anterior.
-
-Vá em `Settings > Version Control` e associe sua conta GitHub ao Terraform cloud e selecione o *fork* deste repositório em sua conta.
 
 Vá em `Settings > General` e em `Terraform Working Directory` preencha com `cloud-infrastructure/shared`
 
@@ -232,17 +228,17 @@ Para o workspace `production`:
 | AWS_ACCESS_KEY_ID | Access Key ID do usuário IAM Terraform* | Não |
 | AWS_SECRET_ACCESS_KEY | Secret da Access Key do usuário IAM Terraform* | Sim |
 
-Faça a mesma associação com o GitHub e em `Terraform Working Directory` preencha com `cloud-infrastructure/production`.
+Faça a mesma associação com o GitHub (`Settings -> Version Control -> Connect to version control`) e em `Terraform Working Directory` preencha com `cloud-infrastructure/production`.
 
 Neste momento será possível aplicar a primeira parte da infraestrutura.
 
 #### Deploy da infraestrutura - Shared
 
-Primeiro vá no workspace `shared` e se não houver nenhuma execução em processo, execute uma manualmente. O Terraform Cloud divide cada intervenção de infraestrutura em `plan` e `apply`. No estágio `plan`, uma descrição do que será feito, com todas as configurações de cada recurso a ser criado.
+Primeiro vá no workspace `shared` e se não houver nenhuma execução em processo, execute uma manualmente (`Queue plan > Queue plan`). O Terraform Cloud divide cada intervenção de infraestrutura em `plan` e `apply`. No estágio `plan`, uma descrição do que será feito, com todas as configurações de cada recurso a ser criado.
 
-Quando o estágio de `plan` for concluído na infraestrutura `shared`, o resumo deve mostrar `Plan: 19 to add, 0 to change, 0 to destroy`. Aprove o plan, e a infraestrutura base será criada.
+Quando o estágio de `plan` for concluído na infraestrutura `shared`, o resumo deve mostrar `Plan: 19 to add, 0 to change, 0 to destroy`. Aprove o plan (`Confirm & apply`), e a infraestrutura base será criada.
 
-Quando o estágio de `apply` terminar, um output extenso em letras verdes será impresso na tela. Nele, busque por `route53_delegation_set` para que possamos criar no registrar de seu domínio os records tipo `NS`:
+Quando o estágio de `apply` terminar, um output extenso em letras verdes será impresso na tela. Nele, busque por `route53_delegation_set` para que possamos criar no registrar de seu domínio os records tipo `NS`. Por exemplo:
 
 ```
 route53_delegation_set = {
@@ -256,11 +252,11 @@ route53_delegation_set = {
 }
 ```
 
-Crie no registrar os quatro registros NS com o mesmo nome que a variável `zone_name` foi configurada e aguarde a "propagação" do registro. Com isso iremos efetivamente delegar a administração do subdomínio `devops-challenge.seudomínio.com` para a AWS para que possamos criar os certificados SSL e direcionar requisições para o CloudFront.
+Crie no registrar os quatro registros NS com o mesmo nome que a variável `zone_name` foi configurada e aguarde a "propagação" do registro. Com isso iremos efetivamente delegar a administração do subdomínio `devops-challenge.seudomínio.com` para a AWS para que possamos criar os certificados SSL e direcionar requisições para o CloudFront e Load Balancer.
 
 #### Deploy da infraestrutura - Production
 
-Agora podemos criar a infraestrutura de produção. No workspace `production` execute um *run* manualmente, caso um não esteja esperando. Aguarde que o `plan` conclua com `Plan: 32 to add, 0 to change, 0 to destroy.` em seu resumo. Aplique o plan e aguarde a conclusão.
+Agora podemos criar a infraestrutura de produção. No workspace `production` execute um *run* manualmente, caso um não esteja esperando. Aguarde que o `plan` conclua com `Plan: 33 to add, 0 to change, 0 to destroy.` em seu resumo. Aplique o plan e aguarde a conclusão.
 
 Essa etapa demorará entre 20 e 30 minutos para concluir, pois criará autoscaling groups, load balancers, ECS clusters, certificados IAM, CloudFront e Route53 Records. Houve um caso em que, num deploy do zero da infraestrutura, o terraform encontrou um problema com o provider. Na ocasião o provider havia gerado alguma inconsistência entre `plan` e `apply` e por via das dúvidas o terraform decidiu interromper o deploy da infraestrutura. Caso algo semelhante ocorra, apenas inicialize um novo run manualmente que a infraestrutura deverá subir normalmente.
 
@@ -460,6 +456,8 @@ Apesar do ECS ser interessante para aplicações de docker na AWS, ele restringe
 Para o Intuito deste exercício é interessante essa abordagem de armazenamento no S3 por ser algo simples e fácil de configurar. Porém a abordagem de abandonar esquema abre portas para corrupção de dados. Outro problema seria a falta de suporte a multiplos usuários. Se mais de uma pessoa entrar na aplicação, ela se comportará de forma errática.
 
 - Implementar uma autenticação OIDC para o frontend
+
+- [AWS WAF (Web Application Firewall)](https://aws.amazon.com/waf/) para proteção da aplicação contra DDoS e possíveis injeções SQL quando o banco de dados transacional for implementado.
 
 - Criar um Jenkinsfile para pipeline programática do Jenkins
 
