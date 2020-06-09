@@ -92,11 +92,11 @@ Note que todos os elementos de infraestrutura podem ser utilizados no free tier:
 
 ### Terraform
 
-O projeto do Terraform, que se encontra na pasta `cloud-infrastrucutre` segue o modelo de [composição de infraestrura](https://www.terraform-best-practices.com/key-concepts#composition). Grosso modo, é um modelo que segmenta a infraestrurua, deixando em um mesmo estado apenas os recursos que realmente são necessários. Com isso ganhamos eficiência em deploy, pois com uma infraestrutura segmentada existem menos recursos para serem atualizados em tempo de *plan*.
+O projeto do Terraform, que se encontra na pasta `cloud-infrastrucutre` segue o modelo de [composição de infraestrura](https://www.terraform-best-practices.com/key-concepts#composition). Grosso modo, é um modelo que segmenta a infraestrurua, deixando em um mesmo estado apenas os recursos que realmente são necessários. Com isso ganhamos eficiência em deploy, pois em uma infraestrutura segmentada existem menos recursos para serem atualizados em tempo de *plan*.
 
 Também reduzimos o *blast radius* (ou raio de "explosão"), que é a lista efetiva de recursos que podem ser afetados por uma intervenção mal planejada. Dessa forma, se a infraestrutura *shared*, *production* e outros eventuais ambientes como *staging* estiverem em seus respectivos workspaces, uma má implementação afetaria primeiramente o ambiente *staging*, aumentando as chances de ser visto e corrigido antes de afetar o ambiente de produção.
 
-Para se alcançar este efeito, importamos dados compartilhados entre os workspaces. O workspace *production* depende da infraestrutura de rede, que é única, compartilhada entre todos os ambientes. Para isso, é importado o estado de *shared* através do Data Source `terraform_remote_state`, que recebe o tipo de backend e sua configuração de acesso.
+Para se alcançar este efeito, importamos dados compartilhados entre os workspaces. O workspace *production* depende da infraestrutura de rede criada no workspace *shared*, que é única, compartilhada entre todos os ambientes. Para isso, é importado o estado de *shared* através do Data Source `terraform_remote_state`, que recebe como argumento o tipo de backend e sua configuração de acesso.
 
 ### Deploy
 
