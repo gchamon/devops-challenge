@@ -256,7 +256,7 @@ Crie no registrar os quatro registros NS com o mesmo nome que a variável `zone_
 
 #### Deploy da infraestrutura - Production
 
-Agora podemos criar a infraestrutura de produção. No workspace `production` execute um *run* manualmente, caso um não esteja esperando. Aguarde que o `plan` conclua com `Plan: 32 to add, 0 to change, 0 to destroy.` em seu resumo. Aplique o plan e aguarde a conclusão.
+Agora podemos criar a infraestrutura de produção. No workspace `production` execute um *run* manualmente, caso um não esteja esperando. Aguarde que o `plan` conclua com `Plan: 33 to add, 0 to change, 0 to destroy.` em seu resumo. Aplique o plan e aguarde a conclusão.
 
 Essa etapa demorará entre 20 e 30 minutos para concluir, pois criará autoscaling groups, load balancers, ECS clusters, certificados IAM, CloudFront e Route53 Records. Houve um caso em que, num deploy do zero da infraestrutura, o terraform encontrou um problema com o provider. Na ocasião o provider havia gerado alguma inconsistência entre `plan` e `apply` e por via das dúvidas o terraform decidiu interromper o deploy da infraestrutura. Caso algo semelhante ocorra, apenas inicialize um novo run manualmente que a infraestrutura deverá subir normalmente.
 
