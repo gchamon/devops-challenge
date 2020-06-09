@@ -168,7 +168,17 @@ Ao criar uma conta na AWS, você terá apenas a própra conta raíz (root accoun
 
 Com a root account, crie dois usuários, um para você entrar pelo console e outro para o terraform e associe aos dois permissão da policy *AdministratorFullAccess*.
 
-Para o usuário de console, crie uma senha e para o usuário do terraform crie uma chave de acesso de API. Precisaremos dela no Terraform Cloud.
+Crie uma senha e uma chave de API para o seu usuário de console para o usuário do terraform crie apenas uma chave de acesso de API. Precisaremos dela no Terraform Cloud.
+
+No terminal, execute `aws configure` e preencha com suas credenciais:
+
+```sh
+$ aws configure
+AWS Access Key ID [****************IJ57]: AKIA4RVABCDEFGHIJK
+AWS Secret Access Key [****************m3K3]: ABCDLgH6TLTJFSRqBKPBa8xTTCkjmnsbduehEFGH
+Default region name [us-east-1]: us-east-2
+Default output format [None]: 
+```
 
 ### Terraform Cloud
 
