@@ -170,8 +170,6 @@ Com a root account, crie dois usuários, um para você entrar pelo console e out
 
 Para o usuário de console, crie uma senha e para o usuário do terraform crie uma chave de acesso de API. Precisaremos dela no Terraform Cloud.
 
-Digite no console ``
-
 ### Terraform Cloud
 
 #### Configuração
