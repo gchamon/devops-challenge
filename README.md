@@ -75,7 +75,7 @@ Os certificados SSL são gerenciados pelo [AWS Certificate Manager](https://aws.
 
 A infraestrutura utiliza o [Route 53](https://aws.amazon.com/route53/) para definição de DNS que faz referência a nossa distribuição do CloudFront. Ela espera que um domínio exista e produz quatro [Name Servers](https://en.wikipedia.org/wiki/Name_server) que precisam ser associados a um domínio real por meio de records tipo NS para que, por exemplo, certificados SSL sejam gerados e que o site seja accessível.
 
-A chave para acesso SSH das instâncias do cluster ECS é depositada automaticamente num bucket definido. No entanto, o ECS possui um painel de monitoramento bastante compreensivo, com eventos, métricas e logs que torna acesso direto por terminal às máquinas desnecessário.
+A chave para acesso SSH das instâncias do cluster ECS é depositada automaticamente num bucket definido. No entanto, o ECS possui um painel de monitoramento bastante compreensivo, com eventos, métricas e logs que torna acesso direto por terminal às máquinas desnecessário. Por definição de segurança, por meio de Security Groups, as instâncias do cluster só são accessíveis pelo Load Balancer, ou seja somente requisições na [Camada de Aplicação](https://pt.wikipedia.org/wiki/Camada_de_aplica%C3%A7%C3%A3o) chegam nas instâncias, impedindo acesso por SSH remoto. Não contando com as instâncias EC2, resto da aplicação é totalmente gerenciado pela AWS, portanto ficamos seguros quanto a ataques e indisponibilidades pois no [Modelo de Responsabilidade Compartilhada](https://aws.amazon.com/pt/compliance/shared-responsibility-model/) da AWS, contanto que tomemos as precauções de segurança de tráfego e dos dados que nossa aplicação manipula, a AWS se encarrega da disponibilidade da infraestrutura e de todos os seus [serviços gerenciados](https://www.ibm.com/blogs/cloud-computing/2015/02/05/whats-difference-managed-unmanaged-clouds/).
 
 Abaixo encontra-se um diagrama da topologia da infraestrutura em nuvem:
 
@@ -456,6 +456,8 @@ Apesar do ECS ser interessante para aplicações de docker na AWS, ele restringe
 Para o Intuito deste exercício é interessante essa abordagem de armazenamento no S3 por ser algo simples e fácil de configurar. Porém a abordagem de abandonar esquema abre portas para corrupção de dados. Outro problema seria a falta de suporte a multiplos usuários. Se mais de uma pessoa entrar na aplicação, ela se comportará de forma errática.
 
 - Implementar uma autenticação OIDC para o frontend
+
+- [AWS WAF (Web Application Firewall)](https://aws.amazon.com/waf/) para proteção da aplicação contra DDoS e possíveis injeções SQL quando o banco de dados transacional for implementado.
 
 - Criar um Jenkinsfile para pipeline programática do Jenkins
 
