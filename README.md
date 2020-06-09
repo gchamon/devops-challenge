@@ -228,7 +228,7 @@ Para o workspace `production`:
 | AWS_ACCESS_KEY_ID | Access Key ID do usuário IAM Terraform* | Não |
 | AWS_SECRET_ACCESS_KEY | Secret da Access Key do usuário IAM Terraform* | Sim |
 
-Faça a mesma associação com o GitHub e em `Terraform Working Directory` preencha com `cloud-infrastructure/production`.
+Faça a mesma associação com o GitHub (`Settings -> Version Control -> Connect to version control`) e em `Terraform Working Directory` preencha com `cloud-infrastructure/production`.
 
 Neste momento será possível aplicar a primeira parte da infraestrutura.
 
@@ -238,7 +238,7 @@ Primeiro vá no workspace `shared` e se não houver nenhuma execução em proces
 
 Quando o estágio de `plan` for concluído na infraestrutura `shared`, o resumo deve mostrar `Plan: 19 to add, 0 to change, 0 to destroy`. Aprove o plan, e a infraestrutura base será criada.
 
-Quando o estágio de `apply` terminar, um output extenso em letras verdes será impresso na tela. Nele, busque por `route53_delegation_set` para que possamos criar no registrar de seu domínio os records tipo `NS`:
+Quando o estágio de `apply` terminar, um output extenso em letras verdes será impresso na tela. Nele, busque por `route53_delegation_set` para que possamos criar no registrar de seu domínio os records tipo `NS`. Por exemplo:
 
 ```
 route53_delegation_set = {
