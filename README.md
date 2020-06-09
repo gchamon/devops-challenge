@@ -47,7 +47,7 @@ Durante o desenvolvimento de uma aplicação, é interessante que nos aproximemo
 
 O interessante é que as dependências da aplicação sejam reprodutíveis. Desse modo, podemos assumir que as bibliotecas e aplicações disponíveis ao desenvolvedor durante desenvolvimento serão as mesmas que estarão disponíveis em produção.
 
-Para que isso seja implementado, é utilizado docker. Em desenvolvimento é criado uma imagem base e a pasta local do desenvolvedor é mapeada para dentro do container, de modo que suas modificações se reflitam dentro dele. Para produção, produzimos uma imagem com tudo que a aplicação precisa rodar, todos os artefatos e dependências, e enviamos para o [Elastic Container Registry](https://aws.amazon.com/ecr/). Este assunto será abordado com maiores detalhes quando especificarmos a topologia da infraestrutura em nuvem.
+Para que isso seja implementado, é utilizado docker. Em desenvolvimento é criado uma imagem base e a pasta local do desenvolvedor é mapeada para dentro do container, de modo que suas modificações se reflitam dentro dele. Para produção, produzimos uma imagem com tudo que a aplicação precisa rodar, todos os artefatos e dependências, e enviamos para o [Elastic Container Registry](https://aws.amazon.com/ecr/).
 
 ### Cloud
 
