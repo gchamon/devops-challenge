@@ -194,7 +194,7 @@ No Terraform Cloud, esses workspaces precisam de três variáves do terraform co
 |--|--|
 | aws_region | recomendado: `us-east-2` |
 | zone_name | devops-challenge.seudomínio.com |
-| project_name* | seu-nome-devops-challenge |
+| project_name | seu-nome-devops-challenge* |
 
 *A variável `project_name` é utilizada para dar nome aos buckets estáticos de produção. Como os buckets são regionais, mas são indexados globalmente, seus nomes precisam ser únicos. Escolha um nome, portanto que seja único para o seu projeto.
 
