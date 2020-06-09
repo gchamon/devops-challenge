@@ -252,7 +252,7 @@ route53_delegation_set = {
 }
 ```
 
-Crie no registrar os quatro registros NS com o mesmo nome que a variável `zone_name` foi configurada e aguarde a "propagação" do registro. Com isso iremos efetivamente delegar a administração do subdomínio `devops-challenge.seudomínio.com` para a AWS para que possamos criar os certificados SSL e direcionar requisições para o CloudFront.
+Crie no registrar os quatro registros NS com o mesmo nome que a variável `zone_name` foi configurada e aguarde a "propagação" do registro. Com isso iremos efetivamente delegar a administração do subdomínio `devops-challenge.seudomínio.com` para a AWS para que possamos criar os certificados SSL e direcionar requisições para o CloudFront e Load Balancer.
 
 #### Deploy da infraestrutura - Production
 
