@@ -258,7 +258,31 @@ Crie no registrar os quatro registros NS com o mesmo nome que a variável `zone_
 
 Agora podemos criar a infraestrutura de produção. No workspace `production` execute um *run* manualmente, caso um não esteja esperando. Aguarde que o `plan` conclua com `Plan: 33 to add, 0 to change, 0 to destroy.` em seu resumo. Aplique o plan e aguarde a conclusão.
 
-Essa etapa demorará entre 20 e 30 minutos para concluir, pois criará autoscaling groups, load balancers, ECS clusters, certificados IAM, CloudFront e Route53 Records. Houve um caso em que, num deploy do zero da infraestrutura, o terraform encontrou um problema com o provider. Na ocasião o provider havia gerado alguma inconsistência entre `plan` e `apply` e por via das dúvidas o terraform decidiu interromper o deploy da infraestrutura. Caso algo semelhante ocorra, apenas inicialize um novo run manualmente que a infraestrutura deverá subir normalmente.
+Essa etapa demorará entre 20 e 30 minutos para concluir, pois criará autoscaling groups, load balancers, ECS clusters, certificados IAM, CloudFront e Route53 Records.
+
+Num deploy do zero da infraestrutura, o terraform costuma encontrar problemas com o provider. Na ocasião o provider gerada alguma inconsistência entre `plan` e `apply` e por via das dúvidas o terraform interrompe o deploy da infraestrutura:
+
+```
+Error: Provider produced inconsistent final plan
+
+When expanding the plan for
+module.production_environment.module.ecs_service_backend.aws_ecs_task_definition.this
+to include new values learned so far during apply, provider
+"registry.terraform.io/-/aws" produced an invalid new value for .volume:
+planned set element
+cty.ObjectVal(map[string]cty.Value{"docker_volume_configuration":cty.ListValEmpty(cty.Object(map[string]cty.Type{"autoprovision":cty.Bool,
+"driver":cty.String, "driver_opts":cty.Map(cty.String),
+"labels":cty.Map(cty.String), "scope":cty.String})),
+"efs_volume_configuration":cty.ListValEmpty(cty.Object(map[string]cty.Type{"file_system_id":cty.String,
+"root_directory":cty.String})), "host_path":cty.UnknownVal(cty.String),
+"name":cty.UnknownVal(cty.String)}) does not correlate with any element in
+actual.
+
+This is a bug in the provider, which should be reported in the provider's own
+issue tracker.
+```
+
+Caso algo semelhante ocorra, isso é esperado. Apenas inicialize um novo *run* manualmente que a infraestrutura deverá subir normalmente.
 
 ### Ansible
 
