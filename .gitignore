@@ -35,4 +35,5 @@ node_modules
 __pycache__
 production-vars.yml
 frontend/js/config-production.js
+backend/*.json
 
