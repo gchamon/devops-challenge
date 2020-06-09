@@ -446,4 +446,6 @@ Para o Intuito deste exercício é interessante essa abordagem de armazenamento 
 
 - Implementar uma autenticação OIDC para o frontend
 
+- Criar um Jenkinsfile para pipeline programática do Jenkins
+
 - Melhorar a documentação dos módulos do terraform
