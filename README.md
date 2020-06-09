@@ -89,7 +89,6 @@ Note que todos os elementos de infraestrutura podem ser utilizados no free tier:
 | Load Balancer | 750 horas |
 | S3 | 5 GB |
 | CloudFront | 50 GB |
-|  ||
 
 ### Terraform
 
