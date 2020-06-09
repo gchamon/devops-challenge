@@ -182,11 +182,11 @@ credentials "app.terraform.io" {
 }
 ```
 
-Ao logar no Terraform Cloud, crie uma organização chamada `devops-challenge`. Com isso será possível inicializar os workspaces.
+Ao logar no Terraform Cloud, crie uma organização chamada `devops-challenge`. Ao criar a organização, será pedido para se criar um workspace. Você pode associar agora o *fork* desse projeto da sua conta GitHub e criar o workspace *shared*.
 
-Navegue para a pasta `cloud-infrastructure/shared` e inicialize o terraform com `terraform init`. Faça o mesmo em `cloud-infrastructure/shared`. Dois workspaces serão criados no Terraform Cloud.
+No linux, navegue para a pasta `cloud-infrastructure/shared` e inicialize o terraform com `terraform init`. Faça o mesmo em `cloud-infrastructure/production`. Dois workspaces serão criados no Terraform Cloud.
 
-Esses workspaces precisam de três variáves do terraform configuradas e duas variáveis de ambiente. Vá no terraform cloud, selecione a organização criada, e selecione o workspace `shared`. No topo, clique em `Variables`. O ambiente necessita que seja configurado com as seguintes variáveis:
+No Terraform Cloud, esses workspaces precisam de três variáves do terraform configuradas e duas variáveis de ambiente. Vá no Terraform Cloud, na organização criada e selecione o workspace `shared`. No topo, clique em `Variables`. O ambiente necessita que seja configurado com as seguintes variáveis:
 
 - **Terraform Variables**
 
@@ -206,8 +206,6 @@ Esses workspaces precisam de três variáves do terraform configuradas e duas va
 | AWS_SECRET_ACCESS_KEY | Secret da Access Key do usuário IAM Terraform* | Sim |
 
 *Esses usuários foram criados na conta AWS no console, no passo anterior.
-
-Vá em `Settings > Version Control` e associe sua conta GitHub ao Terraform cloud e selecione o *fork* deste repositório em sua conta.
 
 Vá em `Settings > General` e em `Terraform Working Directory` preencha com `cloud-infrastructure/shared`
 
